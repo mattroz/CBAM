@@ -82,8 +82,14 @@ class SAM(nn.Module):
 
 class CBAM(nn.Module):
 
-    def __init__(self):
-        pass
+    def __init__(self, channels, h, w):
+        super().__init__()
+        self.CAM = CAM(channels, h, w)
+        self.SAM = SAM(channels, h, w)
 
-    def forward(self, *input):
-        pass
+    def forward(self, input_tensor):
+        channel_att_map = self.CAM(input_tensor)
+        gated_tensor = torch.mul(input_tensor, channel_att_map)
+        spatial_att_map = self.SAM(gated_tensor)
+        refined_tensor = torch.mul(gated_tensor, spatial_att_map)
+        return refined_tensor
