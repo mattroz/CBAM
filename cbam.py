@@ -65,8 +65,6 @@ class SAM(nn.Module):
         # Get pad values for SAME padding for conv2d
         h_pad = self._get_padding(concatenated.shape[2], self.ks, 1)
         w_pad = self._get_padding(concatenated.shape[3], self.ks, 1)
-        # Handle situation if feature tensor dims are less than default kernel size (which is 7, acc. to paper)
-        self.ks = min(h, w) if ((h < 7) or (w < 7)) else self.ks
         spatial_attention_map = self.sigmoid(
             nn.Conv2d(kernel_size=self.ks, in_channels=2, out_channels=1, padding=(h_pad, w_pad))(concatenated)
         )

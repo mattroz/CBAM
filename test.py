@@ -2,19 +2,20 @@ import torch
 
 from cbam import CAM, SAM, CBAM
 
+
 def test_CAM(input_tensor):
     c,h,w = input_tensor.shape[1:]
-    cam = CAM(channels=c, h=h, w=w)
+    cam = CAM(in_channels=c)
     return cam(input_tensor)
 
 def test_SAM(input_tensor):
     c,h,w = input_tensor.shape[1:]
-    sam = SAM(channels=c, h=h, w=w)
+    sam = SAM()
     return sam(input_tensor)
 
 def test_CBAM(input_tensor):
     c,h,w = input_tensor.shape[1:]
-    cbam = CBAM(channels=c, h=h, w=w)
+    cbam = CBAM(in_channels=c)
     return cbam(input_tensor)
 
 def main():
