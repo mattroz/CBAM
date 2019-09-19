@@ -63,6 +63,7 @@ class SAM(nn.Module):
         super().__init__()
         self.ks = ks
         self.sigmoid = nn.Sigmoid()
+        self.conv = nn.Conv2d(kernel_size=self.ks, in_channels=2, out_channels=1)
 
     def _get_padding(self,
                      dim_in,
@@ -102,8 +103,9 @@ class SAM(nn.Module):
         h_pad = self._get_padding(concatenated.shape[2], self.ks, 1)
         w_pad = self._get_padding(concatenated.shape[3], self.ks, 1)
         # Get spatial attention map over concatenated features.
+        self.conv.padding = (h_pad, w_pad)
         spatial_attention_map = self.sigmoid(
-            nn.Conv2d(kernel_size=self.ks, in_channels=2, out_channels=1, padding=(h_pad, w_pad))(concatenated)
+            self.conv(concatenated)
         )
         return spatial_attention_map
 
